@@ -1,5 +1,6 @@
 import telebot
 import config
+import json
 
 bot = telebot.TeleBot(config.TOKEN)
 
@@ -9,7 +10,8 @@ def send_welcome(message):
 
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):
-	print(message)
-	bot.reply_to(message, message.text)
+	res=json.dumps(json.loads(message), indent=2, sort_keys=True)
+	print(res)
+	bot.send_message(message.chat.id, res)
 
 bot.polling()

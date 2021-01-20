@@ -65,12 +65,12 @@ def send_newnblognote(message):
     else:
         con=connection.Connection('../database/chatbot_test.db')
         fechaCreacion= converter.getToday()
-        idBlog=generadorIds.getIdBlog(fechaCreacion,message.from_user.id)
-        idBlog=con.insertBlog(idBlog,blogNote[0],fechaCreacion,message.from_user.id)
+        aux=generadorIds.getIdBlog(fechaCreacion,message.from_user.id)
+        idBlog=con.insertBlog(aux,blogNote[0],fechaCreacion,message.from_user.id)
         print(idBlog)
         idNota=generadorIds.getId(message.date)
         con.insertBlogNota(idNota,fechaCreacion,blogNote[1],message.from_user.id,idBlog)
-        bot.send_message(message.chat.id,f'Nota guardada con fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day} en el blog {blogNote[1]}')
+        bot.send_message(message.chat.id,f'Nota guardada con fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day} en el blog {blogNote[0]}')
         con.closeConnection()
 
 @bot.message_handler(content_types=['document'])

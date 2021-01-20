@@ -31,11 +31,11 @@ class Converter:
         #print(f'Hide: {hide}')
         #bot.send_message(message.chat.id, hide,parse_mode='MARKDOWN')
         
-    def getBlogNote(self,text):
+    def getBlogNote(self,texto):
         cadena=texto[12:]
         lista=cadena.split(';')
         if(len(lista)<=1):
-            lista=[None,'Parece que no has escrito de forma correcta el comando. Intenta escribir **__/newblognote__** <blog> <note>']
+            lista=[None,'Parece que no has escrito de forma correcta el comando. Intenta escribir **__/newblognote__** <blog> **;** <note>']
         else:
             blog=lista[0]
             lista.pop(0)

@@ -18,14 +18,15 @@ class Connection:
             self.connection.commit()
     
     def insertBlog(self,idBlog,blog,fechaCreacion,idUsuario):
-        self.cursor.execute(queries.GET_BLOG(idBlog,idUsuario))
+        self.cursor.execute(queries.GET_BLOG.format(blog,idUsuario))
         lineaBlog=self.cursor.fetchall()
+        print(lineaBlog)
         if not len(lineaBlog):
             self.cursor.execute(queries.INSERT_BLOG.format(idBlog,blog,fechaCreacion,idUsuario))
             self.connection.commit()
             return idBlog
         else:
-            return lineaBlog[0]['idBlog']
+            return lineaBlog[0][1]
     
     def insertNota(self,idNota,fechaCreacion,nota,idUsuario,media='Sin media',documentId='Sin documentId',photoId='Sin photoId',caption='Sin caption',nombreArchivo='Sin nombreArchivo',idBlog='Sin idBlog'):
         #consulta=queries.INSERT_NOTA.format(idNota,fechaCreacion,nota,media,documentId,photoId,caption,nombreArchivo,idUsuario,idBlog)

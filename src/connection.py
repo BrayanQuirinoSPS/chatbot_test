@@ -56,6 +56,10 @@ class Connection:
         if res:
             return res
         return None
+
+    def updateMediaNota(self,media,idNota):
+        self.cursor.execute(queries.UPDATE_MEDIA_NOTA.format(media,idNote))
+        self.connection.commit()
     
     def deleteNota(self,idNote):
         self.cursor.execute(queries.DELETE_NOTA.format(idNote))

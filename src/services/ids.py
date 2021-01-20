@@ -5,7 +5,7 @@ class Ids:
         self.converter=dateconverter.Converter()
         self.identificador=str(uuid.uuid4())
 
-    def getId(fecha):
+    def getId(self,fecha):
         self.identificador+=str(self.converter.getDateFromTimestamp(fecha))
         return self.identificador
 

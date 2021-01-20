@@ -13,35 +13,33 @@ today = datetime.datetime.now()
 bot = telebot.TeleBot(config.API_TOKEN)
 con=connection.Connection('../database/chatbot_test.db')
 converter=dateconverter.Converter()
-ids=ids.Ids()
+generadorIds=ids.Ids()
 
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     con=connection.Connection('../database/chatbot_test.db')
     #print(str(today))
     con.insertUsuario(message.from_user.id,message.from_user.first_name,str(today))
-    bot.reply_to(message, "Hola con este bot podrás guardar las notas que quieras, ejecuta **_/help_** para saber más",parse_mode='MARKDOWN')
+    bot.reply_to(message, "Hola con este bot podrás guardar las notas que quieras, ejecuta **__/help__** para saber más",parse_mode='MARKDOWN')
     con.closeConnection()
 @bot.message_handler(commands=['help'])
-def send_welcome(message):
+def send_help(message):
     con=connection.Connection('../database/chatbot_test.db')
     con.insertUsuario(message.from_user.id,message.from_user.first_name,str(today))
     bot.send_message(message.chat.id, config.HELP,parse_mode='MARKDOWN')
     con.closeConnection()
 
-@bot.message_handler(commands=['close'])
-def send_welcome(message):
-    con.closeConnection()
-    bot.send_message(message.chat.id, 'Conecxión cerrada')
-
 @bot.message_handler(commands=['simplenote'])
-def send_welcome(message):
+def send_simplenote(message):
+    con=connection.Connection('../database/chatbot_test.db')
     lastcommand='/simplenote'
-    idNota=ids.getId(message.date)
+    #print(dir(generadorIds))
+    idNota=generadorIds.getId(message.date)
     fechaCreacion=converter.getDateFromTimestamp(message.date)
-    nota=meesage.text[9:]
+    nota=message.text[12:]
     con.insertNota(idNota,str(fechaCreacion),nota,None,None,None,None,None,message.from_user.id,None)
     bot.send_message(message.chat.id,f'Nota guardada con fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}')
+    con.closeConnection()
 
 @bot.message_handler(content_types=['audio', 'document', 'photo', 'sticker', 'video', 'video_note', 'voice', 'location', 'contact'])
 def handle_docs_audio(message):

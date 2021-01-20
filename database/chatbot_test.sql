@@ -13,7 +13,7 @@ CREATE TABLE usuarios (
 
 CREATE TABLE notas (
   idNota TEXT PRIMARY KEY NOT NULL,
-  fechaCracion DATE,
+  fechaCreacion DATE,
   nota TEXT,
   media BLOB,
   documentId TEXT,

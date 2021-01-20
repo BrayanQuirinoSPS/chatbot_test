@@ -1,5 +1,5 @@
 import sqlite3
-import queriesFolder import queries
+from queriesFolder import queries
 
 class Connection:
     def __init__(self,database):
@@ -14,7 +14,7 @@ class Connection:
     def insertUsuario(self,idUsuario,nombre,fechaIngreso):
         self.cursor.execute(queries.GET_USUARIO.format(idUsuario))
         if not self.cursor.fetchone():
-            self.cursor.execute(queries.INSERT_USUARIO.format(idUsuario,nombre,fechaIgreso))
+            self.cursor.execute(queries.INSERT_USUARIO.format(idUsuario,nombre,fechaIngreso))
             self.connection.commit()
     
     def insertBlog(self,idBlog,blog,fechaCreacion,idUsuario):

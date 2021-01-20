@@ -1,8 +1,8 @@
 import uuid
-import dateConverter
+from . import dateconverter
 class Ids:
     def __init__(self):
-        self.converter=dateConverter.Converter()
+        self.converter=dateconverter.Converter()
         self.identificador=str(uuid.uuid4())
 
     def getId(fecha):

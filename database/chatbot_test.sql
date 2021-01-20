@@ -1,22 +1,24 @@
---DROP DATABASE IF EXISTS chatbot_test;
---CREATE DATABASE chatbot_test;
+DROP DATABASE IF EXISTS chatbot_test;
+CREATE DATABASE chatbot_test;
 
 --\c chatbot_test;
 
 CREATE TABLE usuarios (
-  idUsuario TEXT PRIMARY KEY NOT NULL,
+  idUsuario NUMERIC PRIMARY KEY NOT NULL,
   nombre TEXT,
-  fechaIngreso TEXT
+  fechaIngreso DATE
 );
 
 CREATE TABLE notas (
   idNota TEXT PRIMARY KEY NOT NULL,
-  fechaCracion TEXT,
+  fechaCracion DATE,
   nota TEXT,
-  archivos BLOB,
-  audios BLOB,
-  fotos BLOB,
-  idUsuario TEXT NOT NULL,
+  media BLOB,
+  documentId TEXT,
+  photoId TEXT,
+  caption TEXT,
+  nombreArchivo TEXT,
+  idUsuario NUMERIC NOT NULL,
   idBlog TEXT,
   FOREIGN KEY (idUsuario) REFERENCES usuarios (idUsuario),
   FOREIGN KEY (idBlog) REFERENCES blogs (idBlog)
@@ -25,11 +27,10 @@ CREATE TABLE notas (
 CREATE TABLE blogs (
   idBlog TEXT PRIMARY KEY NOT NULL,
   blog TEXT,
-  fechaCreacion TEXT,
-  idUsuario TEXT,
+  fechaCreacion DATE,
+  idUsuario NUMERIC,
   FOREIGN KEY (idUsuario) REFERENCES usuarios (idUsuario)
 );
 
 
-INSERT INTO usuarios (idUsuario, nombre, fechaIngreso)
-  VALUES ('aaa-bbb-ccc','Brayan Quirino','2021-01-19');
+--INSERT INTO usuarios (idUsuario, nombre, fechaIngreso) VALUES (1,'Brayan Quirino','2021-01-19');

@@ -15,8 +15,10 @@ def handle_docs_audio(message):
     file_info = bot.get_file(message.document.file_id)
     path=f'https://api.telegram.org/file/bot{config.TOKEN}/{str(file_info.file_path)}'
     file = requests.get(path)
-    print(f'{str(file.url)}')
-    bot.send_document(message.chat.id, file.content)
+	print(f'file_info: {dir(file_info)}')
+	hide=f'Archivo: [{str(file_info.file_path)}]({path})'
+    print(f'Hide: {hide}')
+    bot.send_message(message.chat.id, hide,parse_mode='MARKDOWN')
 
 @bot.message_handler(func=lambda m: True)
 def echo_all(message):

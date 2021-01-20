@@ -3,7 +3,7 @@ import config
 import requests
 from io import BytesIO
 
-bot = telebot.TeleBot(config.TOKEN)
+bot = telebot.TeleBot(config.API_TOKEN)
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
@@ -13,7 +13,7 @@ def send_welcome(message):
 def handle_docs_audio(message):
     #print(message)
     file_info = bot.get_file(message.document.file_id)
-    path=f'https://api.telegram.org/file/bot{config.TOKEN}/{str(file_info.file_path)}'
+    path=f'https://api.telegram.org/file/bot{config.API_TOKEN}/{str(file_info.file_path)}'
     file = requests.get(path)
 	print(f'file_info: {dir(file_info)}')
 	hide=f'Archivo: [{str(file_info.file_path)}]({path})'

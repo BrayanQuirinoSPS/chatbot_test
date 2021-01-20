@@ -1,8 +1,10 @@
-DROP DATABASE IF EXISTS chatbot_test;
-CREATE DATABASE chatbot_test;
+--DROP DATABASE IF EXISTS chatbot_test;
+--CREATE DATABASE chatbot_test;
 
 --\c chatbot_test;
-
+DROP TABLE IF EXISTS usuarios;
+DROP TABLE IF EXISTS notas;
+DROP TABLE IF EXISTS blogs;
 CREATE TABLE usuarios (
   idUsuario NUMERIC PRIMARY KEY NOT NULL,
   nombre TEXT,

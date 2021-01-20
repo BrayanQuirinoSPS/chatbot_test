@@ -46,8 +46,6 @@ class Connection:
             return res
         return 'No tienes notas en este día'
 
-    def getBlog(self,):
-
     def getNotasFromBlog(self, idUsuario,blog):
         self.cursor.execute(queries.GET_NOTAS_FROM_BLOG.format(idUsuario,blog))
         res= self.cursor.fetchall()

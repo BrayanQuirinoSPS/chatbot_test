@@ -30,6 +30,7 @@ class Converter:
         hide=f'Archivo: [{str(file_info.file_path)}]({path})'
         #print(f'Hide: {hide}')
         #bot.send_message(message.chat.id, hide,parse_mode='MARKDOWN')
+        
     def getBlogNote(self,text):
         cadena=texto[12:]
         lista=cadena.split(';')

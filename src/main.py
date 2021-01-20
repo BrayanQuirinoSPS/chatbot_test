@@ -3,13 +3,11 @@ import telebot
 import config
 import requests
 import session
-import datetime
 from services import ids
 from services import dateconverter
 from io import BytesIO
 
 lastcommand=''
-today = datetime.datetime.now()
 bot = telebot.TeleBot(config.API_TOKEN)
 con=connection.Connection('../database/chatbot_test.db')
 converter=dateconverter.Converter()
@@ -19,13 +17,13 @@ generadorIds=ids.Ids()
 def send_welcome(message):
     con=connection.Connection('../database/chatbot_test.db')
     #print(str(today))
-    con.insertUsuario(message.from_user.id,message.from_user.first_name,str(today))
+    con.insertUsuario(message.from_user.id,message.from_user.first_name,converter.getToday())
     bot.reply_to(message, "Hola con este bot podrás guardar las notas que quieras, ejecuta **__/help__** para saber más",parse_mode='MARKDOWN')
     con.closeConnection()
 @bot.message_handler(commands=['help'])
 def send_help(message):
     con=connection.Connection('../database/chatbot_test.db')
-    con.insertUsuario(message.from_user.id,message.from_user.first_name,str(today))
+    con.insertUsuario(message.from_user.id,message.from_user.first_name,converter.getToday())
     bot.send_message(message.chat.id, config.HELP,parse_mode='MARKDOWN')
     con.closeConnection()
 
@@ -35,11 +33,32 @@ def send_simplenote(message):
     lastcommand='/simplenote'
     #print(dir(generadorIds))
     idNota=generadorIds.getId(message.date)
-    fechaCreacion=today
+    fechaCreacion=converter.getToday()
     nota=message.text[12:]
-    con.insertNota(idNota,str(fechaCreacion),nota,message.from_user.id)
+    con.insertNota(idNota,fechaCreacion,nota,message.from_user.id)
     bot.send_message(message.chat.id,f'Nota guardada con fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}')
     con.closeConnection()
+
+@bot.message_handler(commands=['newnotemedia'])
+def send_newnotemedia(message):
+    con=connection.Connection('../database/chatbot_test.db')
+    print(lastcommand)
+    lastcommand='/newnotemedia'
+    con.insertNota(generadorIds.getId(message.date),converter.getToday(),message.text[12:],message.from_user.id)
+    bot.send_message(message.chat.id,'Envia tu documento')
+    con.closeConnection()
+
+@bot.message_handler(content_types=['document'])
+def handle_docs_document(message):
+    con=connection.Connection('../database/chatbot_test.db')
+    if (lastcommand == '/newnotemedia'):
+        fechaCreacion=converter.getToday()
+        content=getMedia(bot.get_file(message.document.file_id))
+        media=content[1]
+        con.insertNota(generadorIds.getId(message.date),fechaCreacion,message.document.file_name,message.from_user.id,media,message.document.file_id,'Sin photoId','Sin caption',message.document.file_name,'Sin idBlog')
+        bot.send_message(message.chat.id,'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.mont}-{fechaCreacion.day}\n[**__Download file__**]({content[1]})',parse_mode='MARKDOWN')
+    con.closeConnection()
+    
 
 @bot.message_handler(content_types=['audio', 'document', 'photo', 'sticker', 'video', 'video_note', 'voice', 'location', 'contact'])
 def handle_docs_audio(message):

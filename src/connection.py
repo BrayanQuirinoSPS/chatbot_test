@@ -50,6 +50,13 @@ class Connection:
             return res
         return 'Aún no tienes blogs'
     
+    def getFileName(self,fileId,idUsuario):
+        self.cursor.execute(queries.GET_FILE_NAME.format(idUsuario,fileId))
+        res= self.cursor.fetchone()
+        if res:
+            return res
+        return None
+    
     def deleteNota(self,idNote):
         self.cursor.execute(queries.DELETE_NOTA.format(idNote))
         self.connection.commit()

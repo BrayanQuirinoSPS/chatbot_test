@@ -30,16 +30,18 @@ def send_help(message):
 
 @bot.message_handler(commands=['simplenote'])
 def send_simplenote(message):
-    con=connection.Connection('../database/chatbot_test.db')
     global lastcommand
     lastcommand='/simplenote'
-    #print(dir(generadorIds))
-    idNota=generadorIds.getId(message.date)
-    fechaCreacion=converter.getToday()
-    nota=message.text[12:]
-    con.insertNota(idNota,fechaCreacion,nota,message.from_user.id)
-    bot.send_message(message.chat.id,f'Nota guardada con fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}')
-    con.closeConnection()
+    nota=message.text[11:]
+    if(nota):
+        con=connection.Connection('../database/chatbot_test.db')
+        idNota=generadorIds.getId(message.date)
+        fechaCreacion=converter.getToday()
+        con.insertNota(idNota,fechaCreacion,nota,message.from_user.id)
+        bot.send_message(message.chat.id,f'Nota guardada con fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}')
+        con.closeConnection()
+    else:
+        bot.send_message(message.chat.id,f'Parece que tu nota esta vacia, intenta escribir **__/simplenote__** <nota>',parse_mode='MARKDOWN')
 
 @bot.message_handler(commands=['newnotemedia'])
 def send_newnotemedia(message):
@@ -52,6 +54,24 @@ def send_newnotemedia(message):
     con.insertNota(lastIdNota,converter.getToday(),message.text[12:],message.from_user.id)
     bot.send_message(message.chat.id,'Envia tu documento')
     con.closeConnection()
+
+@bot.message_handler(commands=['newblognote'])
+def send_newnblognote(message):
+    global lastcommand
+    lastcommand='/newblognote'
+    blogNote=converter.getBlogNote(message.text)
+    if(blogNote[0]==None):
+        bot.send_message(message.chat.id,blogNote[1],parse_mode='MARKDOWN')
+    else:
+        con=connection.Connection('../database/chatbot_test.db')
+        fechaCreacion= converter.getToday()
+        idBlog=generadorIds.getIdBlog(fechaCreacion,message.from_user.id)
+        idBlog=con.insertBlog(idBlog,blogNote[0],fechaCreacion,message.from_user.id)
+        print(idBlog)
+        idNota=generadorIds.getId(message.date)
+        con.insertBlogNota(idNota,fechaCreacion,blogNote[1],message.from_user.id,idBlog)
+        bot.send_message(message.chat.id,f'Nota guardada con fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day} en el blog {blogNote[1]}')
+        con.closeConnection()
 
 @bot.message_handler(content_types=['document'])
 def handle_docs_document(message):

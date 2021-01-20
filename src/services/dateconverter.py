@@ -1,5 +1,7 @@
 from datetime import datetime
-import src.config as config
+import sys
+sys.path.insert(0, '..')
+from src import config
 import requests
 class Converter:
     def __init__(self):
@@ -19,7 +21,7 @@ class Converter:
         path=f'https://api.telegram.org/file/bot{config.API_TOKEN}/{str(file_info.file_path)}'
         file = requests.get(path)
         if(file.status_code == 200):
-            lista=[path,res.content]
+            lista=[path,file.content]
             return lista
         return 'Sin media'
 

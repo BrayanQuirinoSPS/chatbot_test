@@ -9,7 +9,7 @@ where notas.idUsuario={0} AND blogs.idUsuario={0} AND blogs.blog={1} AND notas.i
 
 INSERT_USUARIO='INSERT INTO usuarios(idUsuario,nombre,fechaIngreso) VALUES ({0},"{1}","{2}");'
 INSERT_BLOG='INSERT INTO blogs(idBlog,blog,fechaCreacion,idUsuario) VALUES ("{0}","{1}","{2}",{3});'
-INSERT_NOTA='INSERT INTO notas(idNota,fechaCreacion,nota,media,documentId,photoId,caption,nombreArchivo,idUsuario,idBlog) VALUES ("{0}","{1}","{2}",{3},"{4}","{5}","{6}","{7}",{8},"{9}");'
+INSERT_NOTA='INSERT INTO notas(idNota,fechaCreacion,nota,media,documentId,photoId,caption,nombreArchivo,idUsuario,idBlog) VALUES ("{0}","{1}","{2}","{3}","{4}","{5}","{6}","{7}",{8},"{9}");'
 
 DELETE_NOTA='DELETE FROM notas where idNota={0};'
 DELETE_BLOG='DELETE FROM blogs where idBlog={0};'

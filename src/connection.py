@@ -23,7 +23,9 @@ class Connection:
             self.cursor.execute(queries.INSERT_BLOG.format(idBlog,blog,fechaCreacion,idUsuario))
             self.connection.commit()
     
-    def insertNota(self,idNota,fechaCreacion,nota,media,documentId,photoId,caption,nombreArchivo,idUsuario,idBlog):
+    def insertNota(self,idNota,fechaCreacion,nota,idUsuario,media='Sin media',documentId='Sin documentId',photoId='Sin photoId',caption='Sin caption',nombreArchivo='Sin nombreArchivo',idBlog='Sin idBlog'):
+        consulta=queries.INSERT_NOTA.format(idNota,fechaCreacion,nota,media,documentId,photoId,caption,nombreArchivo,idUsuario,idBlog)
+        print(consulta)
         self.cursor.execute(queries.INSERT_NOTA.format(idNota,fechaCreacion,nota,media,documentId,photoId,caption,nombreArchivo,idUsuario,idBlog))
         self.connection.commit()
 
@@ -58,5 +60,6 @@ class Connection:
 
     def closeConnection(self):
         self.connection.close()
+
 
 

@@ -4,7 +4,7 @@ class Converter:
         pass
     def getDateFromTimestamp(self,fecha):
             try:
-                x = datetime.datetime.fromtimestamp(fecha).isoformat()
+                x = datetime.datetime.fromtimestamp(fecha)
                 return x
             except:
-                return '2021-01-19T22:40:14'
+                return datetime(1998,3,27)

@@ -35,9 +35,9 @@ def send_simplenote(message):
     lastcommand='/simplenote'
     #print(dir(generadorIds))
     idNota=generadorIds.getId(message.date)
-    fechaCreacion=converter.getDateFromTimestamp(message.date)
+    fechaCreacion=today
     nota=message.text[12:]
-    con.insertNota(idNota,str(fechaCreacion),nota,None,None,None,None,None,message.from_user.id,None)
+    con.insertNota(idNota,str(fechaCreacion),nota,message.from_user.id)
     bot.send_message(message.chat.id,f'Nota guardada con fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}')
     con.closeConnection()
 

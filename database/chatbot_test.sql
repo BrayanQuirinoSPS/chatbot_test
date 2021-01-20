@@ -11,6 +11,14 @@ CREATE TABLE usuarios (
   fechaIngreso DATE
 );
 
+CREATE TABLE blogs (
+  idBlog TEXT PRIMARY KEY NOT NULL,
+  blog TEXT,
+  fechaCreacion DATE,
+  idUsuario NUMERIC,
+  FOREIGN KEY (idUsuario) REFERENCES usuarios (idUsuario)
+);
+
 CREATE TABLE notas (
   idNota TEXT PRIMARY KEY NOT NULL,
   fechaCreacion DATE,
@@ -26,13 +34,7 @@ CREATE TABLE notas (
   FOREIGN KEY (idBlog) REFERENCES blogs (idBlog)
 );
 
-CREATE TABLE blogs (
-  idBlog TEXT PRIMARY KEY NOT NULL,
-  blog TEXT,
-  fechaCreacion DATE,
-  idUsuario NUMERIC,
-  FOREIGN KEY (idUsuario) REFERENCES usuarios (idUsuario)
-);
 
 
 --INSERT INTO usuarios (idUsuario, nombre, fechaIngreso) VALUES (1,'Brayan Quirino','2021-01-19');
+

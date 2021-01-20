@@ -21,8 +21,7 @@ class Converter:
         path=f'https://api.telegram.org/file/bot{config.API_TOKEN}/{str(file_info.file_path)}'
         file = requests.get(path)
         if(file.status_code == 200):
-            lista=[path,file.content]
-            return lista
+            return path
         return 'Sin media'
 
     def getMediLink(self,file_info,file_id):

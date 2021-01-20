@@ -49,7 +49,7 @@ def send_newnotemedia(message):
     #print(lastcommand)
     lastcommand='/newnotemedia'
     lastIdNota = generadorIds.getId(message.date)
-    con.insertNota(lastIdNota,converter.getToday(),message.text[13:],message.from_user.id)
+    con.insertNota(lastIdNota,converter.getToday(),message.text[12:],message.from_user.id)
     bot.send_message(message.chat.id,'Envia tu documento')
     con.closeConnection()
 
@@ -60,11 +60,9 @@ def handle_docs_document(message):
     global lastIdNota
     if (lastcommand == '/newnotemedia'):
         fechaCreacion=converter.getToday()
-        content=converter.getMedia(bot.get_file(message.document.file_id))
-        #media=content[1]
-        #print(content[1])
-        con.updateMediaNota(content[1],lastIdNota)
-        bot.send_message(message.chat.id,'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.mont}-{fechaCreacion.day}\n[**__Download file__**]({content[1]})',parse_mode='MARKDOWN')
+        media=converter.getMedia(bot.get_file(message.document.file_id))
+        con.udateMediaNota(media,lastIdNota)
+        bot.send_message(message.chat.id,'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.mont}-{fechaCreacion.day}\n[**__Download file__**]({media})',parse_mode='MARKDOWN')
     con.closeConnection()
     
 

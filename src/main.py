@@ -8,7 +8,7 @@ from services import dateconverter
 from io import BytesIO
 
 lastcommand='lastcommand'
-lasIdNota='lastIdNota'
+lastIdNota='lastIdNota'
 bot = telebot.TeleBot(config.API_TOKEN)
 con=connection.Connection('../database/chatbot_test.db')
 converter=dateconverter.Converter()
@@ -45,11 +45,11 @@ def send_simplenote(message):
 def send_newnotemedia(message):
     con=connection.Connection('../database/chatbot_test.db')
     global lastcommand
-    global lasIdNota
+    global lastIdNota
     #print(lastcommand)
     lastcommand='/newnotemedia'
-    lasIdNota = generadorIds.getId(message.date)
-    con.insertNota(lasIdNota,converter.getToday(),message.text[12:],message.from_user.id)
+    lastIdNota = generadorIds.getId(message.date)
+    con.insertNota(lastIdNota,converter.getToday(),message.text[13:],message.from_user.id)
     bot.send_message(message.chat.id,'Envia tu documento')
     con.closeConnection()
 
@@ -57,12 +57,13 @@ def send_newnotemedia(message):
 def handle_docs_document(message):
     con=connection.Connection('../database/chatbot_test.db')
     global lastcommand
-    global lasIdNota
+    global lastIdNota
     if (lastcommand == '/newnotemedia'):
         fechaCreacion=converter.getToday()
         content=converter.getMedia(bot.get_file(message.document.file_id))
         #media=content[1]
-        con.insertNota(content[1],lasIdNota)
+        #print(content[1])
+        con.updateMediaNota(content[1],lastIdNota)
         bot.send_message(message.chat.id,'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.mont}-{fechaCreacion.day}\n[**__Download file__**]({content[1]})',parse_mode='MARKDOWN')
     con.closeConnection()
     

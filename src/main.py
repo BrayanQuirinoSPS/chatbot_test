@@ -61,8 +61,8 @@ def handle_docs_document(message):
     if (lastcommand == '/newnotemedia'):
         fechaCreacion=converter.getToday()
         media=converter.getMedia(bot.get_file(message.document.file_id))
-        con.udateMediaNota(media,lastIdNota)
-        bot.send_message(message.chat.id,'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.mont}-{fechaCreacion.day}\n[**__Download file__**]({media})',parse_mode='MARKDOWN')
+        con.updateMediaNota(media,lastIdNota)
+        bot.send_message(message.chat.id,f'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}\n[Download file]({media})',parse_mode='MARKDOWN')
     con.closeConnection()
     
 

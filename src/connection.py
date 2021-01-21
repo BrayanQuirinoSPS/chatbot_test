@@ -45,21 +45,21 @@ class Connection:
         res= self.cursor.fetchall()
         if res:
             return res
-        return 'No tienes notas en este día'
+        return None
 
     def getNotasFromBlog(self, idUsuario,blog):
         self.cursor.execute(queries.GET_NOTAS_FROM_BLOG.format(idUsuario,blog))
         res= self.cursor.fetchall()
         if res:
             return res
-        return 'No tienes notas en este blog'
+        return None
     
     def getBlogs(self,idUsuario):
         self.cursor.execute(queries.GET_BLOGS.format(idUsuario))
         res= self.cursor.fetchall()
         if res:
             return res
-        return 'Aún no tienes blogs'
+        return None
     
     def getFileName(self,fileId,idUsuario):
         self.cursor.execute(queries.GET_FILE_NAME.format(idUsuario,fileId))

@@ -114,7 +114,7 @@ def send_shownotesfromblog(message):
     if(blog):
         con=connection.Connection('../database/chatbot_test.db')
         res=con.getNotasFromBlog(message.from_user.id,blog)
-        if res:
+        if res != None:
             #print(res)
             mensaje=crearNotas(res)
             bot.send_message(message.chat.id,mensaje)
@@ -180,7 +180,7 @@ def send_response(message):
     if text == "Show notes of day":
         ranges=converter.getDateRange()
         res=con.getNotas(ranges[0],ranges[1],message.from_user.id)
-        if res:
+        if res != None:
             #print(res)
             mensaje=crearNotes(res)
             bot.reply_to(message,mensaje,parse_mode="MARKDOWN")
@@ -188,7 +188,7 @@ def send_response(message):
             bot.reply_to(message,'Parace ser que no tienes notas hoy.')
     elif text == "Show blogs":
         res=con.getBlogs(message.from_user.id)
-        if res:
+        if res !=None:
             #print(res)
             mensaje=crearBlogs(res)
             bot.reply_to(message,mensaje,parse_mode="MARKDOWN")

@@ -68,7 +68,14 @@ class Connection:
             return res
         return None
 
-    def updateMediaNota(self,media,idNota):
+    def getBlogFromNota(self,idNota):
+        self.cursor.execute(queries.GET_BLOG_FROM_NOTA.format(idNota))
+        res= self.cursor.fetchone()
+        if res:
+            return res[0][0]
+        return None
+
+    def updateMediaNota(self,media,idNota,caption='Sin caption'):
         #print(queries.UPDATE_MEDIA_NOTA.format(media,idNota))
         self.cursor.execute(queries.UPDATE_MEDIA_NOTA.format(media,idNota))
         self.connection.commit()

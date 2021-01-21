@@ -30,12 +30,27 @@ class Converter:
         hide=f'Archivo: [{str(file_info.file_path)}]({path})'
         #print(f'Hide: {hide}')
         #bot.send_message(message.chat.id, hide,parse_mode='MARKDOWN')
-        
+
     def getBlogNote(self,texto):
         cadena=texto[12:]
         lista=cadena.split(';')
         if(len(lista)<=1):
             lista=[None,'Parece que no has escrito de forma correcta el comando. Intenta escribir **__/newblognote__** <blog> **;** <note>']
+        else:
+            blog=lista[0]
+            lista.pop(0)
+            nota=";".join(lista)
+            lista=[blog,nota]
+        return lista
+
+
+    def getBlogNoteMedia(self,texto):
+        cadena=texto[17:]
+        lista=cadena.split(';')
+        if(len(lista)==0):
+            lista=[None,'Parece que no has escrito de forma correcta el comando. Intenta escribir **__/newblognotemedia__** <blog> **;** <note>\nTambien puedes escribir **__/newblognotemedia__** <blog>;']
+        elif(len(lista)==1):
+            lista.append('')
         else:
             blog=lista[0]
             lista.pop(0)

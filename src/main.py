@@ -55,6 +55,23 @@ def send_newnotemedia(message):
     bot.send_message(message.chat.id,'Envia tu documento')
     con.closeConnection()
 
+
+@bot.message_handler(commands=['newblognotemedia'])
+def send_newblognotemedia(message):
+    global lastcommand
+    global lastIdNota
+    #print(lastcommand)
+    lastcommand='/newblognotemedia'
+    blogNote=converter.getBlogNoteMedia(message.text)
+    if(blogNote[0]==None):
+        bot.send_message(message.chat.id,blogNote[1],parse_mode='MARKDOWN')
+    else:
+        con=connection.Connection('../database/chatbot_test.db')
+        lastIdNota = generadorIds.getId(message.date)
+        con.insertNota(lastIdNota,converter.getToday(),blogNote[1],message.from_user.id,blogNote[0])
+        bot.send_message(message.chat.id,'Envia tu documento')
+        con.closeConnection()
+
 @bot.message_handler(commands=['newblognote'])
 def send_newnblognote(message):
     global lastcommand
@@ -99,6 +116,23 @@ def handle_docs_document(message):
         media=converter.getMedia(bot.get_file(message.document.file_id))
         con.updateMediaNota(media,lastIdNota)
         bot.send_message(message.chat.id,f'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}\n[Download file]({media})',parse_mode='MARKDOWN')
+    elif(lastcommand == '/newblognotemedia'):
+        fechaCreacion= converter.getToday()
+        aux=generadorIds.getIdBlog(fechaCreacion,message.from_user.id)
+        idBlog=con.insertBlog(aux,converter.getBlogFromNota(lastIdNota),fechaCreacion,message.from_user.id)
+        con.updateMediaNota(media,lastIdNota)
+    con.closeConnection()
+
+@bot.message_handler(content_types=['photo'])
+def handle_docs_document(message):
+    con=connection.Connection('../database/chatbot_test.db')
+    global lastcommand
+    global lastIdNota
+    if (lastcommand == '/newnotemedia'):
+        fechaCreacion=converter.getToday()
+        media=converter.getMedia(bot.get_file(message.json.photo[0].file_id))
+        con.updateMediaNota(media,lastIdNota,message.caption)
+        bot.send_message(message.chat.id,f'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}\n![✔]({media})',parse_mode='MARKDOWN')
     con.closeConnection()
     
 

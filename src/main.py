@@ -117,7 +117,9 @@ def send_shownotesfromblog(message):
         if res != None:
             #print(res)
             mensaje=crearNotas(res)
-            bot.send_message(message.chat.id,mensaje)
+            print(mensaje)
+            for m in mensaje:
+                bot.send_message(message.chat.id,m,parse_mode='MARKDOWN')
         else:
             bot.send_message(message.chat.id,f'Parece ser que no tienes notas en este blog')
         con.closeConnection()
@@ -183,7 +185,9 @@ def send_response(message):
         if res != None:
             #print(res)
             mensaje=crearNotes(res)
-            bot.reply_to(message,mensaje,parse_mode="MARKDOWN")
+            #print(len(mensaje))
+            for m in mensaje:
+                bot.send_message(message.chat.id,m)
         else:
             bot.reply_to(message,'Parace ser que no tienes notas hoy.')
     elif text == "Show blogs":
@@ -191,17 +195,17 @@ def send_response(message):
         if res !=None:
             #print(res)
             mensaje=crearBlogs(res)
-            bot.reply_to(message,mensaje,parse_mode="MARKDOWN")
+            for m in mensaje:
+                bot.send_message(message.chat.id,m,parse_mode='MARKDOWN')
         else:
             bot.reply_to(message,f'Parece ser que aún no tienes blogs.')
     # QUITAR TECLADO
     elif text == "Hide Keyboard":
         markup = get_clear_keyboard()
-        bot.send_message(message.chat.id,"Escribe /teclado para mostrarlo.", reply_markup=markup)
+        bot.send_message(message.chat.id,"Escribe /keyboard para mostrarlo.", reply_markup=markup)
     else:
         bot.reply_to(message,"No entiendo tu mensaje. Escribe: /help")
     con.closeConnection()
-
 
 
 bot.polling()

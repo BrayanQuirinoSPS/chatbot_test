@@ -9,7 +9,7 @@ class Connection:
     def getTable(self,table):
         self.cursor.execute(queries.GET_TABLES.format(table))
         res=self.cursor.fetchall()
-        print(res)
+        #print(res)
         return (res)
     def insertUsuario(self,idUsuario,nombre,fechaIngreso):
         self.cursor.execute(queries.GET_USUARIO.format(idUsuario))
@@ -20,7 +20,7 @@ class Connection:
     def insertBlog(self,idBlog,blog,fechaCreacion,idUsuario):
         self.cursor.execute(queries.GET_BLOG.format(blog,idUsuario))
         lineaBlog=self.cursor.fetchall()
-        print(lineaBlog)
+        #print(lineaBlog)
         if not len(lineaBlog):
             self.cursor.execute(queries.INSERT_BLOG.format(idBlog,blog,fechaCreacion,idUsuario))
             self.connection.commit()

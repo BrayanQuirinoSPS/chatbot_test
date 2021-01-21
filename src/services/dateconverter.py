@@ -63,7 +63,7 @@ class Converter:
             lista.pop(0)
             nota=";".join(lista)
             lista=[blog,nota]
-        print(lista)
+        #print(lista)
         return lista
             #print(blog)
             #print(nota)

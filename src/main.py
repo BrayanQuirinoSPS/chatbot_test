@@ -6,7 +6,7 @@ import session
 from services import ids
 from services import dateconverter
 from io import BytesIO
-from services.keyboards import get_main_keyboard,get_clear_keyboar
+from services.keyboards import get_main_keyboard,get_clear_keyboard
 
 lastcommand='lastcommand'
 lastIdNota='lastIdNota'
@@ -85,7 +85,7 @@ def send_newnblognote(message):
         fechaCreacion= converter.getToday()
         aux=generadorIds.getIdBlog(fechaCreacion,message.from_user.id)
         idBlog=con.insertBlog(aux,blogNote[0],fechaCreacion,message.from_user.id)
-        print(idBlog)
+        #print(idBlog)
         idNota=generadorIds.getId(message.date)
         con.insertBlogNota(idNota,fechaCreacion,blogNote[1],message.from_user.id,idBlog)
         bot.send_message(message.chat.id,f'Nota guardada con fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day} en el blog "{blogNote[0]}"')
@@ -115,7 +115,7 @@ def send_shownotesfromblog(message):
         con=connection.Connection('../database/chatbot_test.db')
         res=con.getNotasFromBlog(message.from_user.id,blog)
         if res:
-            print(res)
+            #print(res)
             bot.send_message(message.chat.id,f'El notas "{res}" fue creado')
         else:
             bot.send_message(message.chat.id,f'Problema')
@@ -149,17 +149,26 @@ def handle_docs_document(message):
     con=connection.Connection('../database/chatbot_test.db')
     global lastcommand
     global lastIdNota
+    #print(message.json['photo'][0]['file_id'])
     if (lastcommand == '/newnotemedia'):
         fechaCreacion=converter.getToday()
-        media=converter.getMedia(bot.get_file(message.json.photo[0].file_id))
+        media=converter.getMedia(bot.get_file(message.json['photo'][0]['file_id']))
         con.updateMediaNota(media,lastIdNota,message.caption)
-        bot.send_message(message.chat.id,f'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}\n![✔]({media})',parse_mode='MARKDOWN')
+        #print(f'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}\n![✔]({media})')
+        bot.send_message(message.chat.id,f"Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}\n !['Imagen']({media})",parse_mode="MARKDOWN")
+    elif(lastcommand=='/newblognotemedia'):
+        fechaCreacion= converter.getToday()
+        media=converter.getMedia(bot.get_file(message.json['photo'][0]['file_id']))
+        aux=generadorIds.getIdBlog(fechaCreacion,message.from_user.id)
+        idBlog=con.insertBlog(aux,con.getBlogFromNota(lastIdNota),fechaCreacion,message.from_user.id)
+        con.updateMediaNota(media,lastIdNota)
+        bot.send_message(message.chat.id,f'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}\n !["Imagen"]({media})',parse_mode='MARKDOWN')
     con.closeConnection()
 
 
-@bot.message_handler(commands=['/keyboard'])
+@bot.message_handler(commands=['keyboard'])
 def handle_keyboard(message):
-    markup = get_main_keyboard(message.text)
+    markup = get_main_keyboard()
     bot.send_message(message.chat.id, "Elige una opción: ", reply_markup=markup)
 
 @bot.message_handler(func=lambda message: True)
@@ -193,3 +202,4 @@ def send_response(message):
 
 
 bot.polling()
+

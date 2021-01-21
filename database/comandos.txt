@@ -5,6 +5,7 @@ newnotemedia - <note>(Opcional) Escribe una nota con la fecha actual y el archiv
 newblognote - <blog> ; <note>Escribe una nota en un blog especifico, el blog es creado si no existe.
 newblog - <blog> Crea un nuevo blog de notas.
 newblognotemedia - <blog> ; <note>(Opcional) Escribe una nota en blog especifico con el archivo por ser enviado en un segundo mensaje.
+shownotesfromblog - <blog>; Obtiene las notas de un blog especifico.
 keyboard - Muestra el teclado.
 deleteblog - Abre un teclado con los blogs actuales por ser borrados.
 deletenotefromblog - <blog> Abre un teclado con las notas actuales en un blog para ser borradas.

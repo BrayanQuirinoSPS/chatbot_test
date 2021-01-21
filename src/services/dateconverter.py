@@ -54,7 +54,7 @@ class Converter:
         if(len(texto)>18):
             lista=cadena.split(';')
         if(len(lista)==0):
-            lista=[None,'Parece que no has escrito de forma correcta el comando. Intenta escribir **__/newblognotemedia__** <blog> **;** <note>\nTambien puedes escribir **__/newblognotemedia__** <blog>;']
+            lista=[None,'Parece que no has escrito de forma correcta el comando. Intenta escribir **__/newblognotemedia__** <blog> **;** <note>\nTambien puedes escribir **__/newblognotemedia__** <blog>']
         elif(len(lista)==1):
             lista.append('')
         else:

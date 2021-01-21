@@ -22,7 +22,7 @@ def send_welcome(message):
     con=connection.Connection('../database/chatbot_test.db')
     #print(str(today))
     con.insertUsuario(message.from_user.id,message.from_user.first_name,converter.getToday())
-    bot.reply_to(message, "Hola con este bot podrás guardar las notas que quieras, ejecuta **__/help__** para saber más",parse_mode='MARKDOWN')
+    bot.reply_to(message, f"Hola {message.from_user.first_name} con este bot podrás guardar las notas que quieras, ejecuta **__/help__** para saber más.",parse_mode='MARKDOWN')
     con.closeConnection()
 
 #Te muestra las instrucciones
@@ -44,7 +44,7 @@ def send_simplenote(message):
         idNota=generadorIds.getId(message.date)
         fechaCreacion=converter.getToday()
         con.insertNota(idNota,fechaCreacion,nota,message.from_user.id)
-        bot.send_message(message.chat.id,f'Nota guardada con fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}')
+        bot.send_message(message.chat.id,f'Nota guardada ^^')
         con.closeConnection()
     else:
         bot.send_message(message.chat.id,f'Parece que tu nota está vacia, intenta escribir **__/simplenote__** <nota>',parse_mode='MARKDOWN')
@@ -59,7 +59,7 @@ def send_newnotemedia(message):
     lastcommand='/newnotemedia'
     lastIdNota = generadorIds.getId(message.date)
     con.insertNota(lastIdNota,converter.getToday(),message.text[12:],message.from_user.id)
-    bot.send_message(message.chat.id,'Envia tu documento')
+    bot.send_message(message.chat.id,'Envia tu foto o documento.')
     con.closeConnection()
 
 #Crea una nota que está en n blog y tiene contenido media, si el blog no existe, se crea
@@ -76,7 +76,7 @@ def send_newblognotemedia(message):
         con=connection.Connection('../database/chatbot_test.db')
         lastIdNota = generadorIds.getId(message.date)
         con.insertBlogNota(lastIdNota,converter.getToday(),blogNote[1],message.from_user.id,blogNote[0])
-        bot.send_message(message.chat.id,'Envia tu documento')
+        bot.send_message(message.chat.id,'Envia tu foto o documento.')
         con.closeConnection()
 
 #crea una nota en un blog,si el blog no existe, se crea
@@ -95,7 +95,7 @@ def send_newnblognote(message):
         #print(idBlog)
         idNota=generadorIds.getId(message.date)
         con.insertBlogNota(idNota,fechaCreacion,blogNote[1],message.from_user.id,idBlog)
-        bot.send_message(message.chat.id,f'Nota guardada con fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day} en el blog "{blogNote[0]}"')
+        bot.send_message(message.chat.id,f'Nota guardada en el blog "{blogNote[0]}"')
         con.closeConnection()
 
 #crea un nuevo blog
@@ -103,16 +103,16 @@ def send_newnblognote(message):
 def send_newblog(message):
     global lastcommand
     lastcommand='/newblog'
-    blog=message.text[8:]
+    blog=message.text[9:]
     if(blog):
         con=connection.Connection('../database/chatbot_test.db')
         fechaCreacion= converter.getToday()
         idBlog=generadorIds.getIdBlog(fechaCreacion,message.from_user.id)
         idBlog=con.insertBlog(idBlog,blog,fechaCreacion,message.from_user.id)
-        bot.send_message(message.chat.id,f'El blog "{blog}" fue creado')
+        bot.send_message(message.chat.id,f'El blog "{blog}" fue creado.')
         con.closeConnection()
     else:
-        bot.send_message(message.chat.id,f'Parece que tu blog está vacio, intenta escribir **__/newblog__** <blog>',parse_mode='MARKDOWN')
+        bot.send_message(message.chat.id,f'Parece que no escribiste tu blog, intenta escribir **__/newblog__** <blog>',parse_mode='MARKDOWN')
 
 #Muestra las notas de un blog
 @bot.message_handler(commands=['shownotesfromblog'])
@@ -128,10 +128,10 @@ def send_shownotesfromblog(message):
             for m in mensaje:
                 bot.send_message(message.chat.id,m,parse_mode='MARKDOWN')
         else:
-            bot.send_message(message.chat.id,f'Parece ser que no tienes notas en este blog')
+            bot.send_message(message.chat.id,f'Parece ser que no tienes notas en este blog. :(')
         con.closeConnection()
     else:
-        bot.send_message(message.chat.id,f'Parece que tu blog está vacio, intenta escribir **__/shownotesfromblog__** <blog>',parse_mode='MARKDOWN')
+        bot.send_message(message.chat.id,f'Ops! No indicaste el blog, intenta escribir **__/shownotesfromblog__** <blog>',parse_mode='MARKDOWN')
     
 #Si se manda un documento y se ejecuto un comando anterior como newnotemedia, se edita la ultima nota
 @bot.message_handler(content_types=['document'])
@@ -171,7 +171,7 @@ def handle_docs_document(message):
         aux=generadorIds.getIdBlog(fechaCreacion,message.from_user.id)
         idBlog=con.insertBlog(aux,con.getBlogFromNota(lastIdNota),fechaCreacion,message.from_user.id)
         con.updateMediaNota(media,lastIdNota)
-        bot.send_message(message.chat.id,f'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}\n !["Imagen"]({media})',parse_mode='MARKDOWN')
+        bot.send_message(message.chat.id,f'Nota guardada en el blog "{idBlog}"\n ![Imagen]({media})',parse_mode='MARKDOWN')
     con.closeConnection()
 
 #Manjador del teclado

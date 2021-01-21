@@ -2,7 +2,7 @@ GET_TABLE='SELECT * from {0};'
 GET_USUARIO='SELECT * FROM usuarios WHERE idUsuario={0};'
 GET_BLOG='SELECT * FROM blogs WHERE blog = "{0}" and idUsuario={1};'
 GET_BLOGS='SELECT blog FROM blogs WHERE idUsuario={0}'
-GET_NOTAS='SELECT * FROM notas WHERE fechaCreacion > "{0}" AND fechaCreacion <="{1}" AND idUsuario={2};'
+GET_NOTAS='SELECT fechaCreacion,nota,media FROM notas WHERE fechaCreacion > "{0}" AND fechaCreacion <="{1}" AND idUsuario={2};'
 GET_FILE_NAME='SELECT nombreArchivo FROM notas WHERE idUsuario={0} AND documentId={1};'
 GET_BLOG_FROM_NOTA='SELECT idBlog FROM notas where idNota="{0}"'
 GET_NOTAS_FROM_BLOG="""SELECT notas.idNota,notas.fechaCreacion,notas.nota,

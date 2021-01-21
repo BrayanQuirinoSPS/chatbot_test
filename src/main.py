@@ -6,7 +6,7 @@ import session
 from services import ids
 from services import dateconverter
 from io import BytesIO
-from services.keyboards import get_main_keyboard,get_clear_keyboard
+from services.keyboards import get_main_keyboard,get_clear_keyboard,crearNotas,crearBlogs,crearNotes
 
 lastcommand='lastcommand'
 lastIdNota='lastIdNota'
@@ -116,9 +116,10 @@ def send_shownotesfromblog(message):
         res=con.getNotasFromBlog(message.from_user.id,blog)
         if res:
             #print(res)
-            bot.send_message(message.chat.id,f'El notas "{res}" fue creado')
+            mensaje=crearNotas(res)
+            bot.send_message(message.chat.id,mensaje)
         else:
-            bot.send_message(message.chat.id,f'Problema')
+            bot.send_message(message.chat.id,f'Parece ser que no tienes notas en este blog')
         con.closeConnection()
     else:
         bot.send_message(message.chat.id,f'Parece que tu blog está vacio, intenta escribir **__/shownotesfromblog__** <blog>',parse_mode='MARKDOWN')
@@ -180,17 +181,19 @@ def send_response(message):
         ranges=converter.getDateRange()
         res=con.getNotas(ranges[0],ranges[1],message.from_user.id)
         if res:
-            print(res)
-            bot.reply_to(message,f'Res: {res}',parse_mode="MARKDOWN")
+            #print(res)
+            mensaje=crearNotes(res)
+            bot.reply_to(message,mensaje,parse_mode="MARKDOWN")
         else:
-            bot.reply_to(message,f'Problema',parse_mode="MARKDOWN")
+            bot.reply_to(message,'Parace ser que no tienes notas hoy.')
     elif text == "Show blogs":
         res=con.getBlogs(message.from_user.id)
         if res:
-            print(res)
-            bot.reply_to(message,f'Res: {res}',parse_mode="MARKDOWN")
+            #print(res)
+            mensaje=crearBlogs(res)
+            bot.reply_to(message,mensaje,parse_mode="MARKDOWN")
         else:
-            bot.reply_to(message,f'Problema',parse_mode="MARKDOWN")
+            bot.reply_to(message,f'Parece ser que aún no tienes blogs.')
     # QUITAR TECLADO
     elif text == "Hide Keyboard":
         markup = get_clear_keyboard()

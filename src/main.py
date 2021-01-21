@@ -68,7 +68,7 @@ def send_newblognotemedia(message):
     else:
         con=connection.Connection('../database/chatbot_test.db')
         lastIdNota = generadorIds.getId(message.date)
-        con.insertNota(lastIdNota,converter.getToday(),blogNote[1],message.from_user.id,blogNote[0])
+        con.insertBlogNota(lastIdNota,converter.getToday(),blogNote[1],message.from_user.id,blogNote[0])
         bot.send_message(message.chat.id,'Envia tu documento')
         con.closeConnection()
 
@@ -111,6 +111,7 @@ def handle_docs_document(message):
     con=connection.Connection('../database/chatbot_test.db')
     global lastcommand
     global lastIdNota
+    #print(f'LastIdNota: {lastIdNota}')
     if (lastcommand == '/newnotemedia'):
         fechaCreacion=converter.getToday()
         media=converter.getMedia(bot.get_file(message.document.file_id))
@@ -118,9 +119,11 @@ def handle_docs_document(message):
         bot.send_message(message.chat.id,f'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}\n[Download file]({media})',parse_mode='MARKDOWN')
     elif(lastcommand == '/newblognotemedia'):
         fechaCreacion= converter.getToday()
+        media=converter.getMedia(bot.get_file(message.document.file_id))
         aux=generadorIds.getIdBlog(fechaCreacion,message.from_user.id)
-        idBlog=con.insertBlog(aux,converter.getBlogFromNota(lastIdNota),fechaCreacion,message.from_user.id)
+        idBlog=con.insertBlog(aux,con.getBlogFromNota(lastIdNota),fechaCreacion,message.from_user.id)
         con.updateMediaNota(media,lastIdNota)
+        bot.send_message(message.chat.id,f'Consulta tu nota del blog "{con.getBlogFromNota(lastIdNota)}"con la fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}\n[Download file]({media})',parse_mode='MARKDOWN')
     con.closeConnection()
 
 @bot.message_handler(content_types=['photo'])

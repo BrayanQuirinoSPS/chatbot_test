@@ -72,7 +72,7 @@ class Connection:
         self.cursor.execute(queries.GET_BLOG_FROM_NOTA.format(idNota))
         res= self.cursor.fetchone()
         if res:
-            return res[0][0]
+            return res[0]
         return None
 
     def updateMediaNota(self,media,idNota,caption='Sin caption'):

@@ -32,7 +32,7 @@ class Converter:
         #bot.send_message(message.chat.id, hide,parse_mode='MARKDOWN')
 
     def getBlogNote(self,texto):
-        cadena=texto[12:]
+        cadena=texto[13:]
         lista=cadena.split(';')
         if(len(lista)<=1):
             lista=[None,'Parece que no has escrito de forma correcta el comando. Intenta escribir **__/newblognote__** <blog> **;** <note>']
@@ -45,8 +45,10 @@ class Converter:
 
 
     def getBlogNoteMedia(self,texto):
-        cadena=texto[17:]
-        lista=cadena.split(';')
+        cadena=texto[18:]
+        lista=[]
+        if(len(texto)>18):
+            lista=cadena.split(';')
         if(len(lista)==0):
             lista=[None,'Parece que no has escrito de forma correcta el comando. Intenta escribir **__/newblognotemedia__** <blog> **;** <note>\nTambien puedes escribir **__/newblognotemedia__** <blog>;']
         elif(len(lista)==1):
@@ -56,6 +58,7 @@ class Converter:
             lista.pop(0)
             nota=";".join(lista)
             lista=[blog,nota]
+        print(lista)
         return lista
             #print(blog)
             #print(nota)

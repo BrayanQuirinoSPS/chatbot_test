@@ -4,7 +4,7 @@ GET_BLOG='SELECT * FROM blogs WHERE blog = "{0}" and idUsuario={1};'
 GET_BLOGS='SLECET * FROM blogs WHERE idUsuario={0}'
 GET_NOTAS='SELECT * FROM notas WHERE fechaCreacion LIKE {0} AND idUsuario={1};'
 GET_FILE_NAME='SELECT nombreArchivo FROM notas WHERE idUsuario={0} AND documentId={1};'
-GET_BLOG_FROM_NOTA='SELECT blog FROM notas where idNota="{0}"'
+GET_BLOG_FROM_NOTA='SELECT idBlog FROM notas where idNota="{0}"'
 GET_NOTAS_OF_BLOG="""SELECT notas.idNota,notas.fechaCreacion,notas.nota,
 notas.media,notas.documentId,notas.photoId,notas.caption,notas.nombreArchivo FROM notas,blogs 
 where notas.idUsuario={0} AND blogs.idUsuario={0} AND blogs.blog={1} AND notas.idBlog=blogs.idBlog """

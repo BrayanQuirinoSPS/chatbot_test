@@ -7,7 +7,8 @@ import requests
 class Converter:
     def __init__(self):
         pass
-
+    
+    #Retorna una fecha dado un timestamp
     def getDateFromTimestamp(self,fecha):
             try:
                 x = datetime.fromtimestamp(fecha)
@@ -15,13 +16,17 @@ class Converter:
             except:
                 return datetime.now()
 
+    #Retorna la fecha del dia actual
     def getToday(self):
         return datetime.now()
+
+    #Retorna la fecha actual y la fecha menos un día
     def getDateRange(self):
         x = datetime.now()
         date_before = x + timedelta(-1)
         return [date_before,x]
 
+    #Retorna el path para descargar el archivo
     def getMedia(self,file_info):
         path=f'https://api.telegram.org/file/bot{config.API_TOKEN}/{str(file_info.file_path)}'
         file = requests.get(path)
@@ -29,13 +34,7 @@ class Converter:
             return path
         return 'Sin media'
 
-    def getMediLink(self,file_info,file_id):
-        file_info = bot.get_file(message.document.file_id)
-        path=f'https://api.telegram.org/file/bot{config.API_TOKEN}/{str(file_info.file_path)}'
-        hide=f'Archivo: [{str(file_info.file_path)}]({path})'
-        #print(f'Hide: {hide}')
-        #bot.send_message(message.chat.id, hide,parse_mode='MARKDOWN')
-
+    #Retorna una lista con el blog y nota 
     def getBlogNote(self,texto):
         cadena=texto[13:]
         lista=cadena.split(';')
@@ -48,7 +47,7 @@ class Converter:
             lista=[blog,nota]
         return lista
 
-
+    #Retorna una lista con el blog y nota(puede no estar)
     def getBlogNoteMedia(self,texto):
         cadena=texto[18:]
         lista=[]
@@ -63,8 +62,6 @@ class Converter:
             lista.pop(0)
             nota=";".join(lista)
             lista=[blog,nota]
-        #print(lista)
         return lista
-            #print(blog)
-            #print(nota)
+
 

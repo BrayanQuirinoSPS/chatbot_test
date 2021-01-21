@@ -1,4 +1,0 @@
-# FaztNoteChatBot
-
-## Chatbot de notas
-

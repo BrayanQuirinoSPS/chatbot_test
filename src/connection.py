@@ -40,8 +40,8 @@ class Connection:
         self.cursor.execute(queries.INSERT_NOTA.format(idNota,fechaCreacion,nota,media,documentId,photoId,caption,nombreArchivo,idUsuario,idBlog))
         self.connection.commit()
 
-    def getNotas(self, fechaCreacion,idUsuario):
-        self.cursor.execute(queries.GET_NOTAS.format(fechaCreacion,idUsuario))
+    def getNotas(self, fechaAntes,fechaDespues,idUsuario):
+        self.cursor.execute(queries.GET_NOTAS.format(fechaAntes,fechaDespues,idUsuario))
         res= self.cursor.fetchall()
         if res:
             return res
@@ -55,7 +55,7 @@ class Connection:
         return 'No tienes notas en este blog'
     
     def getBlogs(self,idUsuario):
-        self.cursor.execute(queries.GET_BLOGS.format(idUsuario,blog))
+        self.cursor.execute(queries.GET_BLOGS.format(idUsuario))
         res= self.cursor.fetchall()
         if res:
             return res

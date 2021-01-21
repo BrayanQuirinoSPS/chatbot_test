@@ -1,4 +1,5 @@
 from datetime import datetime
+from datetime import timedelta
 import sys
 sys.path.insert(0, '..')
 from src import config
@@ -16,6 +17,10 @@ class Converter:
 
     def getToday(self):
         return datetime.now()
+    def getDateRange(self):
+        x = datetime.now()
+        date_before = x + timedelta(-1)
+        return [date_before,x]
 
     def getMedia(self,file_info):
         path=f'https://api.telegram.org/file/bot{config.API_TOKEN}/{str(file_info.file_path)}'

@@ -6,6 +6,7 @@ import session
 from services import ids
 from services import dateconverter
 from io import BytesIO
+from services.keyboards import get_main_keyboard,get_clear_keyboar
 
 lastcommand='lastcommand'
 lastIdNota='lastIdNota'
@@ -104,6 +105,23 @@ def send_newblog(message):
         con.closeConnection()
     else:
         bot.send_message(message.chat.id,f'Parece que tu blog está vacio, intenta escribir **__/newblog__** <blog>',parse_mode='MARKDOWN')
+
+@bot.message_handler(commands=['shownotesfromblog'])
+def send_shownotesfromblog(message):
+    global lastcommand
+    lastcommand='/shownotesfromblog'
+    blog=message.text[19:]
+    if(blog):
+        con=connection.Connection('../database/chatbot_test.db')
+        res=con.getNotasFromBlog(message.from_user.id,blog)
+        if res:
+            print(res)
+            bot.send_message(message.chat.id,f'El notas "{res}" fue creado')
+        else:
+            bot.send_message(message.chat.id,f'Problema')
+        con.closeConnection()
+    else:
+        bot.send_message(message.chat.id,f'Parece que tu blog está vacio, intenta escribir **__/shownotesfromblog__** <blog>',parse_mode='MARKDOWN')
     
 
 @bot.message_handler(content_types=['document'])
@@ -137,22 +155,41 @@ def handle_docs_document(message):
         con.updateMediaNota(media,lastIdNota,message.caption)
         bot.send_message(message.chat.id,f'Consulta tu nota con la fecha {fechaCreacion.year}-{fechaCreacion.month}-{fechaCreacion.day}\n![✔]({media})',parse_mode='MARKDOWN')
     con.closeConnection()
-    
 
-#@bot.message_handler(content_types=['audio', 'document', 'photo', 'sticker', 'video', 'video_note', 'voice', 'location', 'contact'])
-#def handle_docs_audio(message):
-#    #print(message)
-#    file_info = bot.get_file(message.document.file_id)
-#    path=f'https://api.telegram.org/file/bot{config.API_TOKEN}/{str(file_info.file_path)}'
-#    file = requests.get(path)
-#    print(f'file_info: {dir(file_info)}')
-#    hide=f'Archivo: [{str(file_info.file_path)}]({path})'
-#    print(f'Hide: {hide}')
-#    bot.send_message(message.chat.id, hide,parse_mode='MARKDOWN')
 
-@bot.message_handler(func=lambda m: True)
-def echo_all(message):
-	res=str(message)
-	bot.send_message(message.chat.id, res)
+@bot.message_handler(commands=['/keyboard'])
+def handle_keyboard(message):
+    markup = get_main_keyboard(message.text)
+    bot.send_message(message.chat.id, "Elige una opción: ", reply_markup=markup)
+
+@bot.message_handler(func=lambda message: True)
+def send_response(message):
+    text = message.text
+    # API CLIMA
+    con=connection.Connection('../database/chatbot_test.db')
+    if text == "Show notes of day":
+        ranges=converter.getDateRange()
+        res=con.getNotas(ranges[0],ranges[1],message.from_user.id)
+        if res:
+            print(res)
+            bot.reply_to(message,f'Res: {res}',parse_mode="MARKDOWN")
+        else:
+            bot.reply_to(message,f'Problema',parse_mode="MARKDOWN")
+    elif text == "Show blogs":
+        res=con.getBlogs(message.from_user.id)
+        if res:
+            print(res)
+            bot.reply_to(message,f'Res: {res}',parse_mode="MARKDOWN")
+        else:
+            bot.reply_to(message,f'Problema',parse_mode="MARKDOWN")
+    # QUITAR TECLADO
+    elif text == "Hide Keyboard":
+        markup = get_clear_keyboard()
+        bot.send_message(message.chat.id,"Escribe /teclado para mostrarlo.", reply_markup=markup)
+    else:
+        bot.reply_to(message,"No entiendo tu mensaje. Escribe: /help")
+    con.closeConnection()
+
+
 
 bot.polling()
